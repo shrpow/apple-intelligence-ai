@@ -1,0 +1,26 @@
+name: FoundationModels CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: macos-26
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Select Xcode Version
+        run: sudo xcode-select -s /Applications/Xcode_26.app/Contents/Developer
+
+      - name: Build
+        run: swift build -c release --arch arm64
+
+      - name: Package Binary
+        run: |
+          cd .build/arm64-apple-macosx/release
+          zip -r ../../../AppleIntelligenceApi.zip AppleIntelligenceApi
